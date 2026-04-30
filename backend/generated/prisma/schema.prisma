@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  clerkId   String   @unique
+  email     String?  @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  habits    Habit[]
+}
+
+model Habit {
+  id             String     @id @default(uuid())
+  name           String
+  description    String?
+  icon           String?    @default("circle")
+  color          String?    @default("#3B82F6")
+  frequencyType  String     @default("daily")
+  frequencyValue String?
+  userId         String
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  logs           HabitLog[]
+  streak         Streak?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+}
+
+model HabitLog {
+  id        String   @id @default(uuid())
+  date      DateTime @default(now())
+  habitId   String
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([habitId, date])
+}
+
+model Streak {
+  id            String @id @default(uuid())
+  currentStreak Int    @default(0)
+  longestStreak Int    @default(0)
+  habitId       String @unique
+  habit         Habit  @relation(fields: [habitId], references: [id], onDelete: Cascade)
+}
