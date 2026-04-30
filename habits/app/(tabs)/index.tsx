@@ -15,6 +15,9 @@ const DashboardScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
+  // Only allow completing habits on the current day
+  const isToday = isSameDay(selectedDate, new Date());
+
   // Fetch habits using TanStack Query - no useEffect needed!
   const { data: habits, isLoading, error } = useHabits(selectedDate);
   const toggleHabit = useToggleHabit(selectedDate);
@@ -170,6 +173,7 @@ const DashboardScreen = () => {
                   categoryId: "",
                 }}
                 isCompletedToday={habit.completedToday}
+                canToggle={isToday}
                 onPress={() => {
                   console.log("[Dashboard] Pressing habit:", habit.id);
                   if (habit.id.startsWith("temp-")) {

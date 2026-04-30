@@ -139,9 +139,11 @@ export function useCreateHabit() {
     },
 
     onSettled: () => {
-      // Refetch to sync with server
       if (userId) {
         queryClient.invalidateQueries({ queryKey: queryKeys.habits(userId) });
+        // Stats depend on habit count — invalidate so stats page is fresh
+        queryClient.invalidateQueries({ queryKey: queryKeys.weeklyStats(userId) });
+        queryClient.invalidateQueries({ queryKey: queryKeys.detailedStats(userId) });
       }
     },
   });
@@ -204,9 +206,12 @@ export function useToggleHabit(date?: Date) {
     onSettled: async () => {
       // Small delay to ensure DB transaction completes before refetch
       await new Promise(resolve => setTimeout(resolve, 100));
-      
+
       if (userId) {
         queryClient.invalidateQueries({ queryKey: queryKeys.habits(userId, dateStr) });
+        // Completion changes affect weekly stats and detailed stats
+        queryClient.invalidateQueries({ queryKey: queryKeys.weeklyStats(userId) });
+        queryClient.invalidateQueries({ queryKey: queryKeys.detailedStats(userId) });
       }
     },
   });
@@ -267,8 +272,8 @@ export function useUpdateHabit() {
     onSettled: () => {
       if (userId) {
         queryClient.invalidateQueries({ queryKey: queryKeys.habits(userId) });
-        queryClient.invalidateQueries({ queryKey: queryKeys.detailedStats(userId) });
         queryClient.invalidateQueries({ queryKey: queryKeys.weeklyStats(userId) });
+        queryClient.invalidateQueries({ queryKey: queryKeys.detailedStats(userId) });
       }
     },
   });
@@ -315,8 +320,8 @@ export function useDeleteHabit() {
     onSettled: () => {
       if (userId) {
         queryClient.invalidateQueries({ queryKey: queryKeys.habits(userId) });
-        queryClient.invalidateQueries({ queryKey: queryKeys.detailedStats(userId) });
         queryClient.invalidateQueries({ queryKey: queryKeys.weeklyStats(userId) });
+        queryClient.invalidateQueries({ queryKey: queryKeys.detailedStats(userId) });
       }
     },
   });
