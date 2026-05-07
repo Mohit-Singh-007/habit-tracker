@@ -141,7 +141,7 @@ export const getHabits = async (req: Request, res: Response): Promise<void> => {
       `[getHabits] Returning ${habitsWithCompletion.length} habits for clerkId: ${clerkId} on date: ${dateStr}`,
     );
 
-    await redis.set(cacheKey, JSON.stringify(habitsWithCompletion), "EX", 300); // 5 min TTL
+    await redis.set(cacheKey, JSON.stringify(habitsWithCompletion), "EX", 300);
     res.json(habitsWithCompletion);
   } catch (error) {
     console.error("Get Habits Error:", error);
@@ -356,7 +356,7 @@ export const getWeeklyStats = async (
       .map(([label, value]) => ({ label, value }))
       .reverse();
 
-    await redis.set(cacheKey, JSON.stringify(result), "EX", 300); // 5 min TTL
+    await redis.set(cacheKey, JSON.stringify(result), "EX", 300); 
     res.json(result);
   } catch (error) {
     console.error("Weekly Stats Error:", error);
@@ -523,7 +523,7 @@ export const getHabitTrend = async (
       }),
     );
 
-    await redis.set(cacheKey, JSON.stringify(trend), "EX", 300); // 5 min TTL
+    await redis.set(cacheKey, JSON.stringify(trend), "EX", 300);
     res.json(trend);
   } catch (error) {
     console.error("Habit Trend Error:", error);
