@@ -84,7 +84,7 @@ const HabitDetailScreen = () => {
     <View className="flex-1 bg-gray-50">
       <SafeScreen>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
-          {/* Custom Header */}
+        
           <View className="flex-row items-center justify-between px-6 py-4">
             <Pressable
               onPress={() => router.back()}
@@ -109,7 +109,7 @@ const HabitDetailScreen = () => {
             </View>
           </View>
 
-          {/* Habit Info Header */}
+         
           <View className="items-center px-6 py-4">
             <View 
               className="mb-6 h-28 w-28 items-center justify-center rounded-[36px] shadow-xl shadow-gray-200"
@@ -127,14 +127,14 @@ const HabitDetailScreen = () => {
             <Text className="mt-6 text-center text-gray-400 font-inter px-4 leading-6">{habit.description || 'No description provided for this habit.'}</Text>
           </View>
 
-          {/* Stats Bar */}
+        
           <View className="mt-10 flex-row justify-between px-6">
             <StatBox label="Streak" value={`${habit.streak?.currentStreak || 0}d`} icon="flame" color="#F25E86" />
             <StatBox label="Success" value={`${Math.round(((habit.streak?.currentStreak || 0) / 30) * 100)}%`} icon="stats-chart" color="#3B82F6" />
             <StatBox label="Record" value={`${habit.streak?.longestStreak || 0}d`} icon="trophy" color="#F59E0B" />
           </View>
 
-          {/* Activity Grid */}
+         
           <View className="mx-6 mt-12 rounded-[40px] bg-white p-8 shadow-sm shadow-gray-100 border border-gray-50">
             <View className="flex-row items-center justify-between mb-8">
               <Pressable onPress={prevMonth} className="p-2">
@@ -187,7 +187,7 @@ const HabitDetailScreen = () => {
             </View>
           </View>
 
-          {/* History / Performance Chart */}
+         
           <View className="mt-8 px-6">
             <ChartSection 
               title="Execution Trend" 

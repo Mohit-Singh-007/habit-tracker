@@ -23,9 +23,7 @@ export const queryKeys = {
   trend: (habitId: string) => ["trend", habitId] as const,
 };
 
-// ============================================
-// USER HOOKS
-// ============================================
+
 
 /**
  * Syncs the Clerk user with the backend database
@@ -43,9 +41,7 @@ export function useSyncUser() {
   });
 }
 
-// ============================================
-// HABIT HOOKS
-// ============================================
+
 
 /**
  * Fetches all habits for the current user
@@ -90,19 +86,19 @@ export function useCreateHabit() {
     mutationFn: (data: Omit<CreateHabitRequest, "clerkId">) =>
       habitAPI.create({ ...data, clerkId: userId! }),
     
-    // Optimistic update for instant UI feedback
+   
     onMutate: async (newHabit) => {
       if (!userId) return;
 
-      // Cancel outgoing refetches
+     
       await queryClient.cancelQueries({ queryKey: queryKeys.habits(userId) });
 
-      // Snapshot previous value
+     
       const previousHabits = queryClient.getQueryData<HabitFromAPI[]>(
         queryKeys.habits(userId)
       );
 
-      // Optimistically update with temporary ID
+      
       const optimisticHabit: HabitFromAPI = {
         id: `temp-${Date.now()}`,
         name: newHabit.name,
@@ -132,7 +128,7 @@ export function useCreateHabit() {
     },
 
     onError: (_err, _newHabit, context) => {
-      // Rollback on error
+    
       if (userId && context?.previousHabits) {
         queryClient.setQueryData(queryKeys.habits(userId), context.previousHabits);
       }
@@ -141,7 +137,6 @@ export function useCreateHabit() {
     onSettled: () => {
       if (userId) {
         queryClient.invalidateQueries({ queryKey: queryKeys.habits(userId) });
-        // Stats depend on habit count — invalidate so stats page is fresh
         queryClient.invalidateQueries({ queryKey: queryKeys.weeklyStats(userId) });
         queryClient.invalidateQueries({ queryKey: queryKeys.detailedStats(userId) });
       }
@@ -161,7 +156,6 @@ export function useToggleHabit(date?: Date) {
   return useMutation({
     mutationFn: (habitId: string) => habitAPI.toggle(habitId, dateStr),
     
-    // Optimistic update
     onMutate: async (habitId) => {
       if (!userId) return;
 
@@ -171,7 +165,7 @@ export function useToggleHabit(date?: Date) {
         queryKeys.habits(userId, dateStr)
       );
 
-      // Update the completion status optimistically
+    
       queryClient.setQueryData<HabitFromAPI[]>(
         queryKeys.habits(userId, dateStr),
         (old) =>
@@ -204,12 +198,11 @@ export function useToggleHabit(date?: Date) {
     },
 
     onSettled: async () => {
-      // Small delay to ensure DB transaction completes before refetch
+      
       await new Promise(resolve => setTimeout(resolve, 100));
 
       if (userId) {
         queryClient.invalidateQueries({ queryKey: queryKeys.habits(userId, dateStr) });
-        // Completion changes affect weekly stats and detailed stats
         queryClient.invalidateQueries({ queryKey: queryKeys.weeklyStats(userId) });
         queryClient.invalidateQueries({ queryKey: queryKeys.detailedStats(userId) });
       }
@@ -233,12 +226,10 @@ export function useUpdateHabit() {
 
       await queryClient.cancelQueries({ queryKey: queryKeys.habits(userId) });
 
-      // Snapshot all cached habit lists for this user
       const previousQueries = queryClient.getQueriesData<HabitFromAPI[]>({
         queryKey: ["habits", userId],
       });
 
-      // Optimistically update every cached habits list that contains this habit
       queryClient.setQueriesData<HabitFromAPI[]>(
         { queryKey: ["habits", userId] },
         (old) =>
@@ -261,7 +252,6 @@ export function useUpdateHabit() {
     },
 
     onError: (_err, _vars, context) => {
-      // Rollback all cached lists
       if (context?.previousQueries) {
         for (const [queryKey, data] of context.previousQueries) {
           queryClient.setQueryData(queryKey, data);
@@ -280,7 +270,7 @@ export function useUpdateHabit() {
 }
 
 /**
- * Deletes a habit
+ * Delete a habit
  */
 export function useDeleteHabit() {
   const queryClient = useQueryClient();
@@ -294,12 +284,12 @@ export function useDeleteHabit() {
 
       await queryClient.cancelQueries({ queryKey: queryKeys.habits(userId) });
 
-      // Snapshot all cached habit lists for this user
+
       const previousQueries = queryClient.getQueriesData<HabitFromAPI[]>({
         queryKey: ["habits", userId],
       });
 
-      // Optimistically remove the habit from every cached list
+      
       queryClient.setQueriesData<HabitFromAPI[]>(
         { queryKey: ["habits", userId] },
         (old) => old?.filter((habit) => habit.id !== habitId) || []
@@ -309,7 +299,6 @@ export function useDeleteHabit() {
     },
 
     onError: (_err, _habitId, context) => {
-      // Rollback all cached lists
       if (context?.previousQueries) {
         for (const [queryKey, data] of context.previousQueries) {
           queryClient.setQueryData(queryKey, data);
@@ -336,7 +325,7 @@ export function useHabitHeatmap(habitId: string | null) {
     queryKey: queryKeys.heatmap(habitId || ""),
     queryFn: () => habitAPI.getHeatmap(habitId!),
     enabled: !!habitId,
-    staleTime: 1000 * 60 * 10, // 10 minutes
+    staleTime: 1000 * 60 * 10, 
   });
 }
 
@@ -350,7 +339,7 @@ export function useWeeklyStats() {
     queryKey: queryKeys.weeklyStats(userId || ""),
     queryFn: () => habitAPI.getWeeklyStats(userId!),
     enabled: !!userId,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5,
   });
 }
 
@@ -379,10 +368,6 @@ export function useHabitTrend(habitId: string | null) {
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
-
-// ============================================
-// UTILITY HOOKS
-// ============================================
 
 /**
  * Helper to check if a habit is completed today

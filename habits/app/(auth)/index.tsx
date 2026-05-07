@@ -12,7 +12,6 @@ const AuthScreen = () => {
 
   return (
     <View className="flex-1 justify-center items-center bg-white px-8">
-      {/* image */}
       <Image
         source={require("../../assets/images/auth.png")}
         className="size-96"
@@ -20,7 +19,6 @@ const AuthScreen = () => {
       />
 
       <View className="gap-3 mt-3">
-        {/* buttons */}
         <TouchableOpacity
           onPress={() => handleSocialAuth("oauth_google")}
           className="flex-row items-center justify-center bg-white border border-gray-300 rounded-full px-6 py-3"
@@ -31,7 +29,6 @@ const AuthScreen = () => {
           }}
           disabled={loadingStrat !== null}
         >
-          {/* loading states later */}
           {loadingStrat === "oauth_google" ? (
             <ActivityIndicator size={"small"} color={"#4285f4"} />
           ) : (
@@ -54,11 +51,10 @@ const AuthScreen = () => {
           style={{
             shadowOffset: { width: 0, height: 1 },
             shadowOpacity: 0.2,
-            elevation: 2, // only works for android
+            elevation: 2,
           }}
           disabled={loadingStrat !== null}
         >
-          {/* loading states later */}
           {loadingStrat === "oauth_apple" ? (
             <ActivityIndicator size={"small"} color={"#4285f4"} />
           ) : (

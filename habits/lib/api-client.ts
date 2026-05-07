@@ -49,7 +49,7 @@ async function fetchAPI<T>(
   }
 }
 
-// User API
+
 export const userAPI = {
   sync: (data: SyncUserRequest) =>
     fetchAPI<User>("/users/sync", {
@@ -58,7 +58,7 @@ export const userAPI = {
     }),
 };
 
-// Habit API
+
 export const habitAPI = {
   getAll: (clerkId: string, date?: string) =>
     fetchAPI<HabitFromAPI[]>(`/habits?clerkId=${encodeURIComponent(clerkId)}${date ? `&date=${date}` : ""}`),

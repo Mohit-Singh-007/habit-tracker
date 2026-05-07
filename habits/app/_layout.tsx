@@ -1,3 +1,4 @@
+import "../global.css";
 import { tokenCache } from "@/lib/cache";
 import { ClerkLoaded, ClerkProvider } from "@clerk/clerk-expo";
 import { Inter_400Regular, Inter_500Medium } from "@expo-google-fonts/inter";
@@ -10,28 +11,23 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import "../global.css";
-
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // Refetch on window focus (when app comes to foreground)
       refetchOnWindowFocus: true,
-      // Retry failed requests
+
       retry: 2,
-      // Cache data for 5 minutes by default
+
       staleTime: 1000 * 60 * 5,
-      // Keep unused data in cache for 10 minutes
+
       gcTime: 1000 * 60 * 10,
     },
     mutations: {
-      // Retry mutations once on network errors
       retry: 1,
     },
   },
 });
-
 
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();

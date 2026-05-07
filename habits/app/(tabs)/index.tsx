@@ -62,7 +62,7 @@ const DashboardScreen = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 100 }}
         >
-          {/* Header */}
+        
           <View className="px-6 pt-2 pb-6">
             <View className="flex-row items-center justify-between">
               <View>
@@ -82,13 +82,13 @@ const DashboardScreen = () => {
             </View>
           </View>
 
-          {/* Calendar Strip */}
+         
           <HorizontalCalendar
             selectedDate={selectedDate}
             onSelectDate={setSelectedDate}
           />
 
-          {/* Progress Card */}
+         
           <View className="mx-6 mb-8 overflow-hidden rounded-[32px] bg-card shadow-xl p-6 border border-border">
             <View className="flex-row items-center justify-between">
               <View>
@@ -113,13 +113,12 @@ const DashboardScreen = () => {
             </View>
           </View>
 
-          {/* Habits List */}
+         
           <View className="px-6">
             <Text className="mb-4 text-sm font-outfit font-bold text-muted-foreground uppercase tracking-widest">
               Your Habits
             </Text>
 
-            {/* Loading State */}
             {isLoading && (
               <View className="py-12 items-center">
                 <ActivityIndicator size="large" color="#3B82F6" />
@@ -129,21 +128,21 @@ const DashboardScreen = () => {
               </View>
             )}
 
-            {/* Error State */}
+           
             {error && (
               <View className="py-12 items-center">
                 <Ionicons name="alert-circle-outline" size={48} color="#EF4444" />
                 <Text className="mt-4 text-foreground font-inter">
                   Failed to load habits
                 </Text>
-                {/* Reverted error message to original */}
+               
                 <Text className="mt-2 text-sm text-muted-foreground font-inter">
                   {error instanceof Error ? error.message : "Unknown error"}
                 </Text>
               </View>
             )}
 
-            {/* Empty State */}
+           
             {!isLoading && !error && habits && habits.length === 0 && (
               <View className="py-12 items-center">
                 <Ionicons name="leaf-outline" size={48} color="#9CA3AF" />
@@ -156,7 +155,7 @@ const DashboardScreen = () => {
               </View>
             )}
 
-            {/* Habits List */}
+           
             {habits?.map((habit) => (
               <HabitCard
                 key={habit.id}

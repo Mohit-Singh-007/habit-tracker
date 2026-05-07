@@ -14,8 +14,13 @@ export default function UserSync() {
   const hasSynced = useRef(false);
 
   useEffect(() => {
-    // Only sync if signed in, haven't synced yet, and not currently syncing
-    if (isSignedIn && userId && user && !hasSynced.current && !syncMutation.isPending) {
+    if (
+      isSignedIn &&
+      userId &&
+      user &&
+      !hasSynced.current &&
+      !syncMutation.isPending
+    ) {
       syncMutation.mutate(
         {
           clerkId: userId,
@@ -24,17 +29,16 @@ export default function UserSync() {
         },
         {
           onSuccess: () => {
-            hasSynced.current = true; // Only mark done after success
+            hasSynced.current = true;
             console.log("[UserSync] User synced to DB successfully");
           },
           onError: (error) => {
             console.error("[UserSync] Failed to sync user to DB:", error);
-            // hasSynced stays false → will retry on next render
           },
-        }
+        },
       );
     }
   }, [isSignedIn, userId, user]);
 
-  return null; // This is a logic-only component
+  return null;
 }

@@ -12,16 +12,21 @@ const ProfileScreen = () => {
   const { isLoaded, user, isSignedIn } = useUser();
   const { signOut, userId } = useAuth();
   const router = useRouter();
-  
+
   // Fetch real habit data for stats
   const { data: habits } = useHabits(undefined, { enabled: !!userId });
 
   const stats = {
     totalHabits: habits?.length || 0,
-    activeStreaks: habits?.filter(h => h.streak && h.streak.currentStreak > 0).length || 0,
-    completionRate: habits?.length 
-      ? Math.round((habits.filter(h => h.streak && h.streak.currentStreak > 0).length / habits.length) * 100) 
-      : 0
+    activeStreaks:
+      habits?.filter((h) => h.streak && h.streak.currentStreak > 0).length || 0,
+    completionRate: habits?.length
+      ? Math.round(
+          (habits.filter((h) => h.streak && h.streak.currentStreak > 0).length /
+            habits.length) *
+            100,
+        )
+      : 0,
   };
 
   const handleSignOut = async () => {
@@ -47,7 +52,6 @@ const ProfileScreen = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 100 }}
         >
-          {/* Header */}
           <View className="px-6 py-8">
             <View className="flex-row items-center justify-between">
               <Text className="text-3xl font-outfit font-bold text-foreground">
@@ -64,12 +68,10 @@ const ProfileScreen = () => {
             </View>
           </View>
 
-          {/* Profile Card */}
           <View
             className="mx-6 mb-8 items-center rounded-[32px] bg-card p-8 border border-border"
             style={{ elevation: 10 }}
           >
-            {/* Avatar */}
             <View
               style={{
                 height: AVATAR_SIZE,
@@ -100,7 +102,6 @@ const ProfileScreen = () => {
                 />
               </View>
 
-              {/* Verified badge */}
               <View
                 style={{
                   position: "absolute",
@@ -120,7 +121,6 @@ const ProfileScreen = () => {
               </View>
             </View>
 
-            {/* User info */}
             <Text className="mt-4 text-2xl font-outfit font-bold text-foreground">
               {user.fullName || "User"}
             </Text>
@@ -128,17 +128,18 @@ const ProfileScreen = () => {
               {user.primaryEmailAddress?.emailAddress}
             </Text>
 
-            {/* Stats */}
             <View className="mt-6 flex-row items-center gap-6">
               <StatItem label="Habits" value={stats.totalHabits.toString()} />
               <Divider />
               <StatItem label="Score" value={`${stats.completionRate}%`} />
               <Divider />
-              <StatItem label="Streaks" value={stats.activeStreaks.toString()} />
+              <StatItem
+                label="Streaks"
+                value={stats.activeStreaks.toString()}
+              />
             </View>
           </View>
 
-          {/* Account Settings */}
           <View className="px-6">
             <Text className="mb-4 text-sm font-outfit font-semibold text-muted-foreground uppercase tracking-wider">
               Account Settings
